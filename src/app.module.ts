@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { AbcdModule } from './abcd/abcd.module';
 import { ConfigModule } from '@nestjs/config';
 
 @Module({
@@ -10,8 +9,8 @@ import { ConfigModule } from '@nestjs/config';
       isGlobal: true,
       envFilePath:
         process.env.NODE_ENV == 'prod' ? 'env/.env.prod' : 'env/.env.dev',
-    }),
-    AbcdModule],
+    })
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
