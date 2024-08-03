@@ -75,6 +75,12 @@ export class Car {
   @Prop({
     type: Boolean,
     required: true,
+  })
+  accidental: boolean;
+
+  @Prop({
+    type: Boolean,
+    required: true,
     default: false,
   })
   sold: boolean;
