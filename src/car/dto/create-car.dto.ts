@@ -1,33 +1,34 @@
-import { IsBoolean, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsArray, IsBoolean, IsMongoId, IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class CreateCarDto   {
     @IsString()
     @IsNotEmpty()
-    make: String;
+    make: string;
 
     @IsString()
     @IsNotEmpty()
-    model: String;
+    model: string;
 
     @IsString()
     @IsNotEmpty()
-    typeofcar: String;
+    typeofcar: string;
 
     @IsNumber()
     @IsNotEmpty()
     year: number;
 
     @IsNotEmpty()
-    price: Float64Array;
+    price: number;
 
     @IsString()
     @IsNotEmpty()
-    specification: String;
+    specification: string;
 
     @IsString()
     @IsNotEmpty()
-    description: String;
+    description: string;
 
+    @IsArray()
     @IsOptional()
     images: string[];
 

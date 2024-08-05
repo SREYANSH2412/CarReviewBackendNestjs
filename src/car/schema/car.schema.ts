@@ -29,10 +29,10 @@ export class Car {
   year: number;
 
   @Prop({
-    type: Float64Array,
+    type: Number,
     required: true,
   })
-  price: Float64Array;
+  price: Number;
 
   @Prop({
     type: String,
