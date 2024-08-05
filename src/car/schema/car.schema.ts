@@ -48,7 +48,7 @@ export class Car {
 
   @Prop({
     type: [String],
-    required: true,
+    required: false,
   })
   images: string[];
 
