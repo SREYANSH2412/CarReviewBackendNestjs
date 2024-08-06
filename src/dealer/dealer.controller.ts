@@ -7,7 +7,6 @@ import {
     Param,
     Delete,
   } from '@nestjs/common';
-  import { CarService } from 'src/car/car.service';
   import { CreateDealerDto } from './dto/create-dealer.dto';
 import { DealerService } from './dealer.service';
 
