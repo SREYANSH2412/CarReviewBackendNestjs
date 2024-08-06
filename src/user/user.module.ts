@@ -3,8 +3,8 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 import { UserBasicService } from './user.basic.service';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Transaction, TransactionSchema } from 'src/transaction/schema/transaction.schema';
 import ModuleDefiner from 'src/utils/module_definer';
+import { User, UserSchema } from './schema/user.schema';
 
 @Module({
   controllers: [UserController],
@@ -14,8 +14,8 @@ import ModuleDefiner from 'src/utils/module_definer';
     MongooseModule.forFeature(
       [
         {
-          name: Transaction.name,
-          schema: TransactionSchema,
+          name: User.name,
+          schema: UserSchema,
         },
       ],
       ModuleDefiner.carDB,
