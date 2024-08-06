@@ -18,10 +18,10 @@ export class Transaction {
   carID: mongoose.Types.ObjectId;
 
   @Prop({
-    type: Float64Array,
+    type: Number,
     required: true,
   })
-  price: Float64Array;
+  price: number;
 
   @Prop({
     type: String,
@@ -32,6 +32,7 @@ export class Transaction {
   @Prop({
     type: String,
     required: true,
+    default: 'pending',
   })
   status: string;
 
