@@ -24,10 +24,10 @@ export class Maintenance {
   details: string;
 
   @Prop({
-    type: Float64Array,
+    type: Number,
     required: true,
   })
-  cost: Float64Array;
+  cost: number;
 
   @Prop({
     type: Date,
