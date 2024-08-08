@@ -1,14 +1,139 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { UserBasicService } from 'src/user/user.basic.service';
 import { CreateUserDto } from './dto/create-user.dto';
+import { FirebaseModule } from 'src/firebase/firebase';
+import * as admin from 'firebase-admin'
+import { InjectModel } from '@nestjs/mongoose';
+import { User, UserDocument } from './schema/user.schema';
+import ModuleDefiner from 'src/utils/module_definer';
+import { Model } from 'mongoose';
+import {
+    createUserWithEmailAndPassword,
+    sendPasswordResetEmail,
+    signInWithEmailAndPassword,
+    signInWithCustomToken,
+    Auth,
+    getAuth,
+  } from '@firebase/auth';
+import { FirebaseApp, initializeApp } from '@firebase/app';
 
 @Injectable()
 export class UserService {
+    private auth: Auth;
     constructor(
+        @InjectModel(User.name, ModuleDefiner.carDB)
+        private readonly userModel: Model<UserDocument>,
+
         private readonly userBasicService: UserBasicService,
-    ){}
+    ){
+        const firebaseConfig = {
+          apiKey: "AIzaSyAFFemp6ciROXZCm8hVESg-YF_7zk4_Fm8",
+          authDomain: "car-review-8a679.firebaseapp.com",
+          projectId: "car-review-8a679",
+          storageBucket: "car-review-8a679.appspot.com",
+          messagingSenderId: "768565198389",
+          appId: "1:768565198389:web:ea64e833d30df845c47b7c",
+          measurementId: "G-D5R8FN71HM"
+        };
+        
+          
+        
+
+        const app: FirebaseApp = initializeApp(
+            firebaseConfig,
+            ModuleDefiner.carClientFirebaseApp,
+        );
+        this.auth = getAuth(app);
+        admin.initializeApp({
+          credential: admin.credential.applicationDefault(),
+        });
+        // FirebaseModule.init();
+    }
+
+    // async createUser(createUserDto: CreateUserDto){
+    //     // return this.userBasicService.createUser(createUserDto);
+    //     const { password, ...restDto } = createUserDto;
+    //     const user = await this.userModel.create(restDto);
+
+    //     await this.signUpWithEmailPassword(
+    //         user.email,
+    //         password
+    //     );
+    //     const emailData = {
+    //         email: user.email,
+    //         admin_name: user.Name,
+    //         password,
+    //     };
+    //     console.log(emailData)
+    //     const token = await admin
+    //         .auth(FirebaseModule.carFirebaseApp)
+    //         .createCustomToken(user._id.toString());
+    
+    //       return { token: token };
+    // }
 
     async createUser(createUserDto: CreateUserDto){
-        return this.userBasicService.createUser(createUserDto);
+        // return this.userBasicService.createUser(createUserDto);
+        const { password, ...restDto } = createUserDto;
+        const user = await this.userModel.create(restDto);
+        console.log(user._id.toString())
+        await this.signUpWithEmailPasswordCustomUid(
+            user.email,
+            password,
+            user._id.toString(),
+        );
+        const emailData = {
+            email: user.email,
+            admin_name: user.Name,
+            password,
+        };
+        console.log(emailData)
     }
+
+
+    async signUpWithEmailPasswordCustomUid(
+        email: string,
+        password: string,
+        customUid: string,
+      ) {
+        try {
+          // Create user with specified UID using Firebase Admin SDK
+          console.log(1)
+          const userRecord = await admin
+            .auth(FirebaseModule.carFirebaseApp)
+            .createUser({
+              uid: customUid,
+              email: email,
+              password: password,
+            });
+    
+          // You can add additional logic here if needed
+    
+          // Generate token if required
+          console.log(2)
+          const token = await admin
+            .auth(FirebaseModule.carFirebaseApp)
+            .createCustomToken(userRecord.uid);
+          console.log(3)
+          return { token: token };
+        } catch (err) {
+          console.log(err);
+          throw new HttpException('Failed to sign up user', HttpStatus.BAD_REQUEST);
+        }
+      }
+
+      async signUpWithEmailPassword(email: string, password: string) {
+        try {
+          const userCredential = await createUserWithEmailAndPassword(
+            this.auth,
+            email,
+            password,
+          );
+          const token = await userCredential.user.getIdToken();
+          return { token: token };
+        } catch (err) {
+          console.log(err);
+          throw new HttpException('Failed to sign up user', HttpStatus.BAD_REQUEST);
+        }
+      }
 }

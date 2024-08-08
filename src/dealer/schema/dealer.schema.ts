@@ -19,12 +19,14 @@ export class Dealer {
   @Prop({
     type: Number,
     required: true,
+    unique: true,
   })
   phone: number;
 
   @Prop({
     type: String,
     required: true,
+    unique: true,
   })
   email: string;
 

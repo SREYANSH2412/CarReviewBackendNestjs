@@ -20,4 +20,8 @@ export class CreateUserDto{
     @IsString({each: true})
     @IsOptional()
     userprefrences: string[];
+
+    @IsString()
+    @IsNotEmpty()
+    password: string;
 }

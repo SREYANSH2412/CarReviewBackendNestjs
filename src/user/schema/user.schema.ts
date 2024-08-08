@@ -14,12 +14,14 @@ export class User {
   @Prop({
     type: String,
     required: true,
+    // unique: true,
   })
   email: string;
 
   @Prop({
     type: Number,
     required: true,
+    // unique: true,
   })
   phone: number;
 

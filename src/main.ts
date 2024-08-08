@@ -12,7 +12,7 @@ async function bootstrap() {
   });
   const configService = app.get(ConfigService);
 
-  FirebaseModule.init;
+  FirebaseModule.init();
 
   app.enableCors({
     origin: true,
