@@ -36,5 +36,11 @@ export class User {
     required: false,
   })
   userprefrences: string[];
+
+  @Prop({
+    type: String,
+    required: true,
+  })
+  password: string;
 }
 export const UserSchema = SchemaFactory.createForClass(User);

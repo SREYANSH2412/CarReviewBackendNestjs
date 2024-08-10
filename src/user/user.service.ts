@@ -1,4 +1,4 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserBasicService } from 'src/user/user.basic.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { FirebaseModule } from 'src/firebase/firebase';
@@ -16,6 +16,9 @@ import {
     getAuth,
   } from '@firebase/auth';
 import { FirebaseApp, initializeApp } from '@firebase/app';
+import * as bcrypt from 'bcryptjs'
+import { JwtService } from '@nestjs/jwt';
+import { LoginDto } from './dto/login.dto';
 
 @Injectable()
 export class UserService {
@@ -23,7 +26,7 @@ export class UserService {
     constructor(
         @InjectModel(User.name, ModuleDefiner.carDB)
         private readonly userModel: Model<UserDocument>,
-
+        private jwtService: JwtService,
         private readonly userBasicService: UserBasicService,
     ){
         const firebaseConfig = {
@@ -50,6 +53,39 @@ export class UserService {
         // FirebaseModule.init();
     }
 
+    async createUser(createUserDto: CreateUserDto): Promise<{ token: string}>{
+      // return this.userBasicService.createUser(createUserDto);
+      const { password, ...restDto } = createUserDto;
+      const hashedpass = await bcrypt.hash(password, 10);
+      createUserDto.password=hashedpass;
+
+      const user = await this.userModel.create(createUserDto)
+
+      const token = this.jwtService.sign({id: user._id})
+
+      return { token }
+  }
+
+  async login(loginDto: LoginDto): Promise<{ token: string }>{
+    const {email, password} = loginDto;
+
+    const user = await this.userModel.findOne({ email });
+
+    if(!user){
+      throw new UnauthorizedException("Invalid email or password")
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+
+    if(!isPasswordValid){
+      throw new UnauthorizedException("Invalid email or password")
+    }
+
+    const token = this.jwtService.sign({id: user._id})
+    return { token }
+
+  }
+
     // async createUser(createUserDto: CreateUserDto){
     //     // return this.userBasicService.createUser(createUserDto);
     //     const { password, ...restDto } = createUserDto;
@@ -72,23 +108,26 @@ export class UserService {
     //       return { token: token };
     // }
 
-    async createUser(createUserDto: CreateUserDto){
-        // return this.userBasicService.createUser(createUserDto);
-        const { password, ...restDto } = createUserDto;
-        const user = await this.userModel.create(restDto);
-        console.log(user._id.toString())
-        await this.signUpWithEmailPasswordCustomUid(
-            user.email,
-            password,
-            user._id.toString(),
-        );
-        const emailData = {
-            email: user.email,
-            admin_name: user.Name,
-            password,
-        };
-        console.log(emailData)
-    }
+    // async createUser(createUserDto: CreateUserDto){
+    //     // return this.userBasicService.createUser(createUserDto);
+    //     const { password, ...restDto } = createUserDto;
+    //     const user = await this.userModel.create(restDto);
+    //     console.log(user._id.toString())
+    //     await this.signUpWithEmailPasswordCustomUid(
+    //         user.email,
+    //         password,
+    //         user._id.toString(),
+    //     );
+    //     const emailData = {
+    //         email: user.email,
+    //         admin_name: user.Name,
+    //         password,
+    //     };
+    //     console.log(emailData)
+    // }
+   
+   
+    
 
 
     async signUpWithEmailPasswordCustomUid(
