@@ -18,4 +18,13 @@ export class CarService {
     async create (createCarDto: CreateCarDto): Promise<Car>{
         return this.carBasicService.createCar(createCarDto);
     }
+
+    async findOne(getId: {id: string}){
+        const gid = getId.id;
+        return this.carModel.findOne({ _id : gid });
+    }
+
+    async findAll(): Promise<Car []>{
+        return this.carModel.find().exec();
+    }
 }
