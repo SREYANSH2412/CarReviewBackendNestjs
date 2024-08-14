@@ -24,4 +24,8 @@ export class CreateDealerDto {
     @IsString()
     @IsOptional()
     images: string;
+
+    @IsString()
+    @IsNotEmpty()
+    password: string;
 }

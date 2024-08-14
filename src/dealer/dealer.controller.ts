@@ -9,6 +9,7 @@ import {
   } from '@nestjs/common';
   import { CreateDealerDto } from './dto/create-dealer.dto';
 import { DealerService } from './dealer.service';
+import { LoginDealer } from './dto/login.dto';
 
 @Controller('dealer')
 export class DealerController {
@@ -17,5 +18,10 @@ export class DealerController {
     @Post()
     create(@Body() createDealerDto: CreateDealerDto){
         return this.dealerService.create(createDealerDto);
+    }
+
+    @Post('login')
+    login(@Body() loginDealer: LoginDealer){
+        return this.dealerService.login(loginDealer);
     }
 }

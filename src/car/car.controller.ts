@@ -10,6 +10,7 @@ import {
   } from '@nestjs/common';
 import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
+import { UpdateCarDto } from './dto/update-car.dto';
 
 @Controller('car')
 export class CarController {
@@ -20,13 +21,24 @@ export class CarController {
         return this.carService.create(createCarDto)
     }
 
-    @Get()
-    findOne(@Body() getId: {id: string}){
-        return this.carService.findOne(getId);
+    @Get(':id')
+    // findOne(@Body() getId: {id: string}){
+    findOne(@Param('id') id: string){
+        return this.carService.findOne(id);
     }
 
     @Get('findall')
     findAll(){
         return this.carService.findAll();
+    }
+    
+    @Patch('update/:id')
+    update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto){
+        return this.carService.update(id, updateCarDto);
+    }
+
+    @Delete(':id')
+    delete(@Param('id') id:string){
+        return this.carService.delete(id);
     }
 }

@@ -5,6 +5,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import ModuleDefiner from 'src/utils/module_definer';
 import mongoose, { Model } from 'mongoose';
 import { CarBasicService } from './car.basic.service';
+import { UpdateCarDto } from './dto/update-car.dto';
 
 @Injectable()
 export class CarService {
@@ -19,12 +20,30 @@ export class CarService {
         return this.carBasicService.createCar(createCarDto);
     }
 
-    async findOne(getId: {id: string}){
-        const gid = getId.id;
-        return this.carModel.findOne({ _id : gid });
+    // async findOne(getId: {id: string}){
+    async findOne(getId: string){
+        // const gid = getId.id;
+        const fone = await this.carModel.findOne({ _id: getId }).exec();
+        if (fone){
+            return fone;
+        } 
+
+        return 'Not found';
     }
 
     async findAll(): Promise<Car []>{
         return this.carModel.find().exec();
+    }
+
+    async update(id: string, updateCarDto: UpdateCarDto){
+        return this.carModel.findByIdAndUpdate(
+            id,
+            { ...updateCarDto, updated_at: new Date() },
+            { new: true, },
+        );
+    }
+
+    async delete(id: string){
+        return this.carModel.findByIdAndDelete(id);
     }
 }

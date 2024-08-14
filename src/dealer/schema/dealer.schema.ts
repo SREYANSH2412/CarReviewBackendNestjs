@@ -62,5 +62,11 @@ export class Dealer {
     default: false,
   })
   is_deleted: boolean;
+
+  @Prop({
+    type: String,
+    required: true,
+  })
+  password: string;
 }
 export const DealerSchema = SchemaFactory.createForClass(Dealer);
