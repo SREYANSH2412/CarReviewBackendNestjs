@@ -8,6 +8,7 @@ import ModuleDefiner from 'src/utils/module_definer';
 import { PassportModule } from '@nestjs/passport';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { CarModule } from 'src/car/car.module';
 
 @Module({
   controllers: [DealerController],
@@ -34,7 +35,8 @@ import { ConfigService } from '@nestjs/config';
         }
       ],
       ModuleDefiner.carDB,
-    )
+    ),
+    CarModule,
   ]
 })
 export class DealerModule {}

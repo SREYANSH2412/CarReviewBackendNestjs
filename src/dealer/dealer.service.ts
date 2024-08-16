@@ -8,12 +8,17 @@ import { CreateDealerDto } from './dto/create-dealer.dto';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs'
 import { LoginDealer } from './dto/login.dto';
+import { Car, CarDocument } from 'src/car/schema/car.schema';
 
 @Injectable()
 export class DealerService {
     constructor(
         @InjectModel(Dealer.name, ModuleDefiner.carDB)
         private dealerModel: Model<DealerDocument>,
+
+        @InjectModel(Car.name, ModuleDefiner.carDB)
+        private carModel: Model<CarDocument>,
+
         private jwtService: JwtService,
         private readonly dealerBasicService: DealerBasicService,
     ) {}
@@ -46,5 +51,11 @@ export class DealerService {
 
         const token = this.jwtService.sign({ id: user._id});
         return { token };
+    }
+    
+    async fetchCars (id: string) {
+        const cars = await this.carModel.find({ DealerID: id });
+
+        return cars;
     }
 }

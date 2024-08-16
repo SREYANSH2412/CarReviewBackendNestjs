@@ -24,4 +24,9 @@ export class DealerController {
     login(@Body() loginDealer: LoginDealer){
         return this.dealerService.login(loginDealer);
     }
+
+    @Get('fetch-cars/:id')
+    fetchCars(@Param('id') id:string){
+        return this.dealerService.fetchCars(id);
+    }
 }

@@ -5,6 +5,7 @@ import ModuleDefiner from 'src/utils/module_definer';
 import { Model } from 'mongoose';
 import { FavoriteBasicService } from './favorite.basic.service';
 import { CreateFavoriteDto } from './dto/create-favorite.dto';
+import { UpdateFavoriteDto } from './dto/update-favorite.dto';
 
 @Injectable()
 export class FavoriteService {
@@ -17,5 +18,17 @@ export class FavoriteService {
 
     async create(createFavoriteDto: CreateFavoriteDto): Promise<FavoriteDocument> {
         return this.favoriteBasicService.createFavorite(createFavoriteDto);
+    }
+
+    async updateFavCar(id: string, updateFavoriteDto: UpdateFavoriteDto){
+        return this.favoriteModel.findByIdAndUpdate(
+            id,
+            { ...updateFavoriteDto, updated_at: new Date() },
+            { new: true, },
+        )
+    }
+
+    async getFavCar( id: string ){
+        return this.favoriteModel.find({ userID: id });
     }
 }

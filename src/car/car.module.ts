@@ -21,6 +21,14 @@ import ModuleDefiner from 'src/utils/module_definer';
       ModuleDefiner.carDB,
     )
   ],
-  exports: [CarService, CarBasicService],
+  exports: [CarService, CarBasicService, MongooseModule.forFeature(
+    [
+      {
+        name: Car.name,
+        schema: CarSchema,
+      }
+    ],
+    ModuleDefiner.carDB,
+  )],
 })
 export class CarModule {}
