@@ -5,17 +5,30 @@ import ModuleDefiner from 'src/utils/module_definer';
 import { Model } from 'mongoose';
 import { InsuranceBasicService } from './insurance.basic.service';
 import { CreateInsuranceDto } from './dto/create-insurance.dto';
+import { UpdateInsuranceDto } from './dto/update-insurance.dto';
 
 @Injectable()
 export class InsuranceService {
     constructor(
         @InjectModel(Insurance.name, ModuleDefiner.carDB)
-        private readonly insuranceModel: Model<Insurance>,
+        private insuranceModel: Model<Insurance>,
 
         private readonly insuranceBasicService: InsuranceBasicService,
     ){}
 
     async create(createInsuranceDto: CreateInsuranceDto): Promise<InsuranceDocument>{
         return this.insuranceBasicService.createInsurance(createInsuranceDto);
+    }
+
+    async updateInsurance(id: string, updateInsuranceDto: UpdateInsuranceDto){
+        return this.insuranceModel.findByIdAndUpdate(
+            id,
+            { ...updateInsuranceDto, updated_at: new Date() },
+            { new: true, },
+        );
+    }
+
+    async getLatestInsuranceByCar(id: string){
+        return this.insuranceModel.findOne({ carID: id });
     }
 }
