@@ -9,7 +9,15 @@ import ModuleDefiner from 'src/utils/module_definer';
 @Module({
   controllers: [MaintenanceController],
   providers: [MaintenanceService, MaintenanceBasicService],
-  exports: [MaintenanceService, MaintenanceBasicService],
+  exports: [MaintenanceService, MaintenanceBasicService, MongooseModule.forFeature(
+    [
+      {
+        name: Maintenance.name,
+        schema: MaintenanceSchema,
+      }
+    ],
+    ModuleDefiner.carDB,
+  )],
   imports: [
     MongooseModule.forFeature(
       [

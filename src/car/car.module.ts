@@ -6,6 +6,7 @@ import { Mongoose } from 'mongoose';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Car, CarSchema } from './schema/car.schema';
 import ModuleDefiner from 'src/utils/module_definer';
+import { MaintenanceModule } from 'src/maintenance/maintenance.module';
 
 @Module({
   controllers: [CarController],
@@ -19,7 +20,8 @@ import ModuleDefiner from 'src/utils/module_definer';
         }
       ],
       ModuleDefiner.carDB,
-    )
+    ),
+    MaintenanceModule,
   ],
   exports: [CarService, CarBasicService, MongooseModule.forFeature(
     [

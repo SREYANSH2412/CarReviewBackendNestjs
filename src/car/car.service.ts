@@ -7,6 +7,7 @@ import mongoose, { Model } from 'mongoose';
 import { CarBasicService } from './car.basic.service';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { FavoriteService } from 'src/favorite/favorite.service';
+import { MaintenanceService } from 'src/maintenance/maintenance.service';
 
 @Injectable()
 export class CarService {
@@ -15,6 +16,8 @@ export class CarService {
         private carModel: Model<CarDocument>,
 
         private readonly carBasicService: CarBasicService,
+
+        private readonly maintenanceService: MaintenanceService,
     ) {}
 
     async create (createCarDto: CreateCarDto): Promise<Car>{
@@ -25,11 +28,24 @@ export class CarService {
     async findOne(getId: string){
         // const gid = getId.id;
         const fone = await this.carModel.findOne({ _id: getId }).exec();
+
         if (fone){
             return fone;
         } 
 
         return 'Not found';
+    }
+
+    async findCarMaintenance(id: string){
+        const fone = await this.carModel.findOne({ _id: id }).exec();
+        const maint = await this.maintenanceService.findOne(id);
+
+        if (fone){
+            return {
+                car: fone,
+                maintenance: maint,
+            }
+        }
     }
 
     async findAll(): Promise<Car []>{

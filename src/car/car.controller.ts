@@ -31,6 +31,11 @@ export class CarController {
     findAll(){
         return this.carService.findAll();
     }
+
+    @Get('get-maintenance/:id')
+    findCarMaintenance(@Param('id') id: string){
+        return this.carService.findCarMaintenance(id);
+    }
     
     @Patch('update/:id')
     update(@Param('id') id: string, @Body() updateCarDto: UpdateCarDto){
