@@ -6,6 +6,7 @@ import ModuleDefiner from 'src/utils/module_definer';
 import mongoose, { Model } from 'mongoose';
 import { CarBasicService } from './car.basic.service';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { FavoriteService } from 'src/favorite/favorite.service';
 
 @Injectable()
 export class CarService {

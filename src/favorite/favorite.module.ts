@@ -10,7 +10,15 @@ import ModuleDefiner from 'src/utils/module_definer';
 @Module({
   controllers: [FavoriteController],
   providers: [FavoriteService, FavoriteBasicService],
-  exports: [FavoriteService, FavoriteBasicService],
+  exports: [FavoriteService, FavoriteBasicService, MongooseModule.forFeature(
+    [
+      {
+        name: Favorite.name,
+        schema: FavoriteSchema,
+      }
+    ],
+    ModuleDefiner.carDB,
+  )],
   imports: [
     MongooseModule.forFeature(
       [

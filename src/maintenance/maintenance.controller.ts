@@ -19,4 +19,9 @@ export class MaintenanceController {
     create(@Body() createMaintenanceDto: CreateMaintenanceDto){
         return this.maintenanceService.create(createMaintenanceDto);
     }
+
+    @Get(':id')
+    findOne(@Param('id') id: string){
+        return this.maintenanceService.findOne(id);
+    }
 }

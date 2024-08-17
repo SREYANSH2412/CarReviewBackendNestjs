@@ -5,7 +5,6 @@ export class CreateMaintenanceDto{
     @IsNotEmpty()
     carID: string;
 
-    @IsDate()
     @IsNotEmpty()
     service_date: Date;
 

@@ -18,4 +18,8 @@ export class MaintenanceService {
     async create(createMaintenanceDto: CreateMaintenanceDto): Promise<MaintenanceDocument>{
         return this.maintenanceBasicService.createMaintenance(createMaintenanceDto);
     }
+
+    async findOne( id: string ) {
+        return this.maintenanceModel.find({ carID: id });
+    }
 }
