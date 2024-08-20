@@ -46,4 +46,9 @@ export class CarController {
     delete(@Param('id') id:string){
         return this.carService.delete(id);
     }
+
+    @Get('fetchInsurance/:id')
+    fetchInsurance(@Param('id') id: string){
+        return this.carService.fetchInsurance(id);
+    }
 }

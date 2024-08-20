@@ -8,6 +8,7 @@ import { CarBasicService } from './car.basic.service';
 import { UpdateCarDto } from './dto/update-car.dto';
 import { FavoriteService } from 'src/favorite/favorite.service';
 import { MaintenanceService } from 'src/maintenance/maintenance.service';
+import { InsuranceService } from 'src/insurance/insurance.service';
 
 @Injectable()
 export class CarService {
@@ -18,6 +19,8 @@ export class CarService {
         private readonly carBasicService: CarBasicService,
 
         private readonly maintenanceService: MaintenanceService,
+
+        private readonly insuranceService: InsuranceService,
     ) {}
 
     async create (createCarDto: CreateCarDto): Promise<Car>{
@@ -62,5 +65,9 @@ export class CarService {
 
     async delete(id: string){
         return this.carModel.findByIdAndDelete(id);
+    }
+
+    async fetchInsurance(id: string){
+        return this.insuranceService.getLatestInsuranceByCar(id);
     }
 }

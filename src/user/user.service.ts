@@ -19,6 +19,10 @@ import { FirebaseApp, initializeApp } from '@firebase/app';
 import * as bcrypt from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt';
 import { LoginDto } from './dto/login.dto';
+import { Review, ReviewDocument } from 'src/review/schema/review.schema';
+import { ReviewService } from 'src/review/review.service';
+import { FavoriteService } from 'src/favorite/favorite.service';
+import { TestdriveService } from 'src/testdrive/testdrive.service';
 
 @Injectable()
 export class UserService {
@@ -26,8 +30,14 @@ export class UserService {
     constructor(
         @InjectModel(User.name, ModuleDefiner.carDB)
         private readonly userModel: Model<UserDocument>,
+        
         private jwtService: JwtService,
         private readonly userBasicService: UserBasicService,
+
+        private readonly reviewService: ReviewService,
+        private readonly favoriteService: FavoriteService,
+
+        private readonly testdriveService: TestdriveService,
     ){
         const firebaseConfig = {
           apiKey: "AIzaSyAFFemp6ciROXZCm8hVESg-YF_7zk4_Fm8",
@@ -174,5 +184,29 @@ export class UserService {
           console.log(err);
           throw new HttpException('Failed to sign up user', HttpStatus.BAD_REQUEST);
         }
+      }
+
+      async fetchUser(id: string){
+        const user = this.userModel.findOne({ _id: id });
+        if(user){
+          return {user};
+        }
+        return "User not found";
+      }
+
+      async fetchReviews(id: string){
+        const reviews = this.reviewService.findforUser(id);
+        if(reviews){
+          return {reviews};
+        }
+        return "No Reviews found";
+      }
+
+      async fetchFav(id: string){
+        return this.favoriteService.getFavCar(id);
+      }
+
+      async fetchTestdrive(id: string){
+        return this.testdriveService.findbyUser(id);
       }
 }

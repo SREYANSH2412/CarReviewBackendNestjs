@@ -10,7 +10,7 @@ import { CreateMaintenanceDto } from './dto/create-maintenance.dto';
 export class MaintenanceService {
     constructor(
         @InjectModel(Maintenance.name, ModuleDefiner.carDB)
-        private readonly maintenanceModel: Model<Maintenance>,
+        private readonly maintenanceModel: Model<MaintenanceDocument>,
 
         private readonly maintenanceBasicService: MaintenanceBasicService,
     ){}

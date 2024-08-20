@@ -9,7 +9,15 @@ import ModuleDefiner from 'src/utils/module_definer';
 @Module({
   controllers: [ReviewController],
   providers: [ReviewService, ReviewBasicService],
-  exports: [ReviewService, ReviewBasicService],
+  exports: [ReviewService, ReviewBasicService, MongooseModule.forFeature(
+    [
+      {
+        name: Review.name,
+        schema: ReviewSchema,
+      }
+    ],
+    ModuleDefiner.carDB
+  )],
   imports: [
     MongooseModule.forFeature(
       [

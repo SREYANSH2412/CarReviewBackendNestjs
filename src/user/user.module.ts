@@ -8,6 +8,9 @@ import { User, UserSchema } from './schema/user.schema';
 import { PassportModule } from '@nestjs/passport'
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
+import { ReviewModule } from 'src/review/review.module';
+import { FavoriteModule } from 'src/favorite/favorite.module';
+import { TestdriveModule } from 'src/testdrive/testdrive.module';
 
 @Module({
   controllers: [UserController],
@@ -34,7 +37,10 @@ import { ConfigService } from '@nestjs/config';
         },
       ],
       ModuleDefiner.carDB,
-    )
+    ),
+    ReviewModule,
+    FavoriteModule,
+    TestdriveModule,
   ]
 })
 export class UserModule {}

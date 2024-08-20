@@ -11,7 +11,7 @@ import { UpdateInsuranceDto } from './dto/update-insurance.dto';
 export class InsuranceService {
     constructor(
         @InjectModel(Insurance.name, ModuleDefiner.carDB)
-        private insuranceModel: Model<Insurance>,
+        private insuranceModel: Model<InsuranceDocument>,
 
         private readonly insuranceBasicService: InsuranceBasicService,
     ){}

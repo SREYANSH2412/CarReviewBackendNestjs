@@ -19,4 +19,24 @@ export class ReviewController {
     create(@Body() createReviewDto: CreateReviewDto){
         return this.reviewService.create(createReviewDto);
     }
+
+    @Patch(':id')
+    update(@Param('id') id: string, @Body() updateReviewDto: CreateReviewDto){
+        return this.reviewService.updateReview(id, updateReviewDto);
+    }
+
+    @Delete(':id')
+    remove(@Param('id') id: string){
+        return this.reviewService.removeReview(id);
+    }
+
+    @Get('forUser/:id')
+    findforUser(@Param('id') id: string){
+        return this.reviewService.findforUser(id);
+    }
+
+    @Get('forCar/:id')
+    findforCar(@Param('id') id: string){
+        return this.reviewService.findforCar(id);
+    }
 }
