@@ -7,7 +7,7 @@ WORKDIR /usr/src/app
 
 # Install app dependencies
 COPY package*.json ./
-RUN npm instal
+RUN npm install
 
 # Copy the environment files
 COPY ./env/.env.dev ./env/.env.dev

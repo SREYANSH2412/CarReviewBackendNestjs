@@ -15,6 +15,9 @@ import { TestdriveModule } from './testdrive/testdrive.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigService } from '@nestjs/config';
 import ModuleDefiner from './utils/module_definer';
+import { PrometheusModule } from '@willsoto/nestjs-prometheus';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './logging.interceptor';
 
 @Module({
   imports: [
@@ -46,8 +49,14 @@ import ModuleDefiner from './utils/module_definer';
     InsuranceModule,
     TestdriveModule,
     LogsModule,
+    PrometheusModule.register(),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
+  ],
 })
 export class AppModule {}
