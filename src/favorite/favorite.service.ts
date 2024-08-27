@@ -21,11 +21,16 @@ export class FavoriteService {
     }
 
     async updateFavCar(id: string, updateFavoriteDto: UpdateFavoriteDto){
-        return this.favoriteModel.findByIdAndUpdate(
-            id,
-            { ...updateFavoriteDto, updated_at: new Date() },
-            { new: true, },
-        )
+        try{
+            return this.favoriteModel.findByIdAndUpdate(
+                id,
+                { ...updateFavoriteDto, updated_at: new Date() },
+                { new: true, },
+            )
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 
     async getFavCar( id: string ){

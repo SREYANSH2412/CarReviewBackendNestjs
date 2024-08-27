@@ -21,11 +21,15 @@ export class InsuranceService {
     }
 
     async updateInsurance(id: string, updateInsuranceDto: UpdateInsuranceDto){
-        return this.insuranceModel.findByIdAndUpdate(
-            id,
-            { ...updateInsuranceDto, updated_at: new Date() },
-            { new: true, },
-        );
+        try{
+            return this.insuranceModel.findByIdAndUpdate(
+                id,
+                { ...updateInsuranceDto, updated_at: new Date() },
+                { new: true, },
+            );
+        } catch(e){
+            console.log(e);
+        }
     }
 
     async getLatestInsuranceByCar(id: string){

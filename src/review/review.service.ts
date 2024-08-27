@@ -21,15 +21,22 @@ export class ReviewService {
     }
 
     async updateReview(id: string, updateReviewDto: UpdateReviewDto): Promise<ReviewDocument>{
-        return this.reviewModel.findByIdAndUpdate(
-            id,
-            { ...updateReviewDto, updated_at: new Date() },
-            { new: true },
-        );
+        try{
+            return this.reviewModel.findByIdAndUpdate(
+                id,
+                { ...updateReviewDto, updated_at: new Date() },
+                { new: true },
+            );
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 
     async removeReview(id: string): Promise<ReviewDocument>{
-        return this.reviewModel.findByIdAndDelete(id);
+        try{return this.reviewModel.findByIdAndDelete(id);}
+        catch(e){console.log(e);}
+        
     }
 
     async findforUser(id: string){

@@ -30,17 +30,23 @@ export class CarService {
     // async findOne(getId: {id: string}){
     async findOne(getId: string){
         // const gid = getId.id;
-        const fone = await this.carModel.findOne({ _id: getId }).exec();
+        try{
+            const fone = await this.carModel.findOne({ _id: getId }).exec();
 
-        if (fone){
-            return fone;
-        } 
+            if (fone){
+                return fone;
+            } 
 
-        return 'Not found';
+            return 'Not found';
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
     async findCarMaintenance(id: string){
-        const fone = await this.carModel.findOne({ _id: id }).exec();
+        try{
+            const fone = await this.carModel.findOne({ _id: id }).exec();
         const maint = await this.maintenanceService.findOne(id);
 
         if (fone){
@@ -49,18 +55,30 @@ export class CarService {
                 maintenance: maint,
             }
         }
+        }
+        catch(err){
+            console.log(err);
+        }
     }
 
     async findAll(): Promise<Car []>{
-        return this.carModel.find().exec();
+        try{
+            return this.carModel.find().exec();
+        } catch(e){
+            console.log(e);
+        }
     }
 
     async update(id: string, updateCarDto: UpdateCarDto){
-        return this.carModel.findByIdAndUpdate(
-            id,
-            { ...updateCarDto, updated_at: new Date() },
-            { new: true, },
-        );
+        try{
+            return this.carModel.findByIdAndUpdate(
+                id,
+                { ...updateCarDto, updated_at: new Date() },
+                { new: true, },
+            );
+        } catch(e){
+            console.log(e);
+        }
     }
 
     async delete(id: string){

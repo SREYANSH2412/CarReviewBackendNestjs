@@ -1,0 +1,65 @@
+chart
+dependencies:
+  - name: prometheus
+    version: '15.18.0'
+    repository: 'https://prometheus-community.github.io/helm-charts'
+  - name: grafana
+    version: '6.43.5'
+    repository: 'https://grafana.github.io/helm-charts'
+
+
+values
+prometheus:
+  alertmanager:
+    enabled: false
+
+  pushgateway:
+    enabled: false
+
+  nodeExporter:
+    enabled: false
+
+grafana:
+  service:
+    type: NodePort
+
+service
+apiVersion: v1
+kind: Service
+metadata:
+  name: carreviewbackendnestjs-service
+spec:
+  selector:
+    app: carreviewbackendnestjs
+  type: LoadBalancer
+  ports:
+  - protocol: TCP
+    port: 3000
+    targetPort: 3000
+
+deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: carreviewbackendnestjs
+  name: carreviewbackendnestjs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: carreviewbackendnestjs
+  template:
+    metadata:
+      labels:
+        app: carreviewbackendnestjs
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: /metrics
+        prometheus.io/port: "3000"
+    spec:
+      containers:
+      - image: sreyansh/carreviewbackendnestjs
+        name: carreviewbackendnestjs
+        ports:
+        - containerPort: 3000

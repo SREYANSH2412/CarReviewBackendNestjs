@@ -1,8 +1,6 @@
-# Stage 1: Building the code
+# Stage 1: Build the project
+FROM node:18-slim AS build
 
-FROM node:20-slim as build
-
-# Create app directory
 WORKDIR /usr/src/app
 
 # Install app dependencies
@@ -20,8 +18,7 @@ COPY . .
 RUN npm run build
 
 # Stage 2: Run the app
-
-FROM node:20-slim
+FROM node:18-slim
 
 WORKDIR /usr/src/app
 
@@ -33,7 +30,6 @@ RUN npm install --only=production
 
 # Copy the production .env file to the production image
 COPY --from=build /usr/src/app/env/.env.prod ./env/.env.prod
-
 COPY --from=build /usr/src/app/env/.env.dev ./env/.env.dev
 
 # Copy built assets from the build stage
@@ -42,5 +38,5 @@ COPY --from=build /usr/src/app/dist ./dist
 # Expose the port the app runs on
 EXPOSE 3000
 
-# Run the web service on container startup
-CMD ["node", "dist/src/main"]
+# Command to run the app
+CMD ["node", "dist/main"]

@@ -9,38 +9,54 @@ import { UpdateTestdriveDto } from './dto/update-testdrive.dto';
 
 @Injectable()
 export class TestdriveService {
-    constructor(
-        @InjectModel(Testdrive.name, ModuleDefiner.carDB)
-        private readonly testdriveModel: Model<TestdriveDocument>,
+  constructor(
+    @InjectModel(Testdrive.name, ModuleDefiner.carDB)
+    private readonly testdriveModel: Model<TestdriveDocument>,
 
-        private readonly testdriveBasicService: TestdriveBasicService,
-    ){}
+    private readonly testdriveBasicService: TestdriveBasicService,
+  ) {}
 
-    async createTestdrive(createTestdriveDto: CreateTestdriveDto): Promise<TestdriveDocument>{
-        return this.testdriveBasicService.createTestdrive(createTestdriveDto);
+  async createTestdrive(
+    createTestdriveDto: CreateTestdriveDto,
+  ): Promise<TestdriveDocument> {
+    try {
+      return this.testdriveBasicService.createTestdrive(createTestdriveDto);
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    async findbyUser(id: string){
-        return this.testdriveModel.find({ userID: id });
+  async findbyUser(id: string) {
+    try {
+      return this.testdriveModel.find({ userID: id });
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    async findbyCar(id: string){
-        return this.testdriveModel.find({ carID: id });
+  async findbyCar(id: string) {
+    try {
+      return this.testdriveModel.find({ carID: id });
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    async remove(id: string){
-        return this.testdriveModel.findByIdAndDelete(id);
-    }
+  async remove(id: string) {
+    return this.testdriveModel.findByIdAndDelete(id);
+  }
 
-    async updateDate(id: string, updateTestdriveDto: UpdateTestdriveDto){
-        return this.testdriveModel.findByIdAndUpdate(
-            id,
-            updateTestdriveDto,
-            { new: true },
-        );
+  async updateDate(id: string, updateTestdriveDto: UpdateTestdriveDto) {
+    try {
+      return this.testdriveModel.findByIdAndUpdate(id, updateTestdriveDto, {
+        new: true,
+      });
+    } catch (e) {
+      console.log(e);
     }
+  }
 
-    async findforCarnUser(id1: string, id2: string){
-        return this.testdriveModel.find({ carID: id1, userID: id2 });
-    }
+  async findforCarnUser(id1: string, id2: string) {
+    return this.testdriveModel.find({ carID: id1, userID: id2 });
+  }
 }
